@@ -31,12 +31,18 @@ const usersRouter = require("./routes/users");
 
 const projectsRouter = require("./routes/project-routes");
 const taskRouter = require("./routes/task-routes");
+//const cors = require('cors');
 
 const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
+
+app.use(cors({
+  credentials: true,
+  origin: ['http://localhost:3000'] // <== esta será la url de nuestra React app (se ejecutará en el puerto 3000)
+}));
 
 // Middleware Setup
 
@@ -45,7 +51,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
+//app.use('/api', require('./routes/task-routes'));
 app.use(favicon(path.join(__dirname, "public", "images", "favicon.ico")));
 
 // ADD CORS SETTINGS HERE TO ALLOW CROSS-ORIGIN INTERACTION:
