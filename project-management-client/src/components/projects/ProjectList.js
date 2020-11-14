@@ -37,34 +37,40 @@ class ProjectList extends Component {
 
     componentDidMount() {
         this.getAllProjects();
-      }
+    }
 
-      render() {
+    render() {
 
-  //5to - renderizamos un mapeo de nuestra lista de proyectos y, para cada uno de ellos, usamos 'Link' para dirigir al usuario a la página del detalle de cada project (utilizaremos aquí la ruta que creamos para dicho fin)
-  //6to - Llamamos a nuestro componente 'AddProject' y le pasamos por props el método que definimos para traer todos nuestros projects.
+        //5to - renderizamos un mapeo de nuestra lista de proyectos y, para cada uno de ellos, usamos 'Link' para dirigir al usuario a la página del detalle de cada project (utilizaremos aquí la ruta que creamos para dicho fin)
+        //6to - Llamamos a nuestro componente 'AddProject' y le pasamos por props el método que definimos para traer todos nuestros projects.
 
-  return (
-    <div>
-      <div>
-        {this.state.listOfProjects.map(project => {
-          return (
-            // usamos el '_id' de cada project como 'key'
-            <div key={project._id}>
-              <Link to={`/projects/${project._id}`}>
-                <h3>{project.title}</h3>
-              </Link>
-              <p style={{maxWidth: '400px'}} >{project.description} </p>
+        return (
+            <div>
+                <div>
+                    {this.state.listOfProjects.map(project => {
+                        return (
+                            // usamos el '_id' de cada project como 'key'
+                            <div key={project._id}>
+                                <Link to={`/projects/${project._id}`}>
+                                    <h3>{project.title}</h3>
+                                    </Link>
+                                    {/*  agregamos una visualización de las tareas que existen a través de un mapeo de las tasks de cada project, y lo retornamos dentro de un <ul> (no olvidar la 'key')   */}
+                                    <ul>
+                                        {project.tasks.map((task, index) => {
+                                            return <li key={index}>{task.title}</li>
+                                        })}
+                                    </ul>
+                                    <p style={{maxWidth: '400px'}} >{project.description} </p>
+                            </div>
+                        )})
+                    }
+                </div>
+                <div>
+                    <AddProject getData={() => this.getAllProjects()} /> {/* <== !!! */}
+                </div>
             </div>
-          );
-        })}
-      </div>
-      <div>
-        <AddProject getData={() => this.getAllProjects()} /> {/* <== !!! */}
-      </div>
-    </div>
-  );
-}
+        );
+    }
 }
 
 export default ProjectList;
