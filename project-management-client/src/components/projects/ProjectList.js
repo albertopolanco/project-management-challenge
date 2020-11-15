@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 // además, importamos a nuestro componente AddProject
 
-import AddProjectList from "./AddProject";
+import AddProject from "./AddProject";
 
 // 1ro - definiremos nuestro componente como componente de clase. Definiremos constructor y super (opcional).
 
@@ -20,16 +20,21 @@ class ProjectList extends Component {
 
     //3ro - definiremos un método que traiga todos nuestros projects:
 
-    getAllProjects = () => {
+    getAllProjects = async () => {
 
         // 3.1 - hacemos una llamada axios a la ruta que creamos específicamente para esa tarea, que 'traiga' nuestros projects
         // 3.2 - 'then' utilizaremos la respuesta de dicha llamada para poblar la key que creamos en nuestro state.
-
-        axios.get(`http://localhost:4000/api/projects`).then(responseFromApi => {
-            this.setState({
-                listOfProjects: responseFromApi.data
-            });
-        });
+        try{
+         let llamada = await axios.get(`http://localhost:4000/api/projects`)
+                this.setState({
+                    listOfProjects: llamada.data
+                });
+            
+            
+        }catch(err){
+            console.log(err)
+        }
+      
     };
 
 
@@ -47,27 +52,33 @@ class ProjectList extends Component {
         return (
             <div>
                 <div>
-                    {this.state.listOfProjects.map(project => {
+                    {this.state.listOfProjects.map(datos => {
+                        return (
+                            <div>
+                        <h3>{datos.title}</h3>
+                            <h3>{datos.description}</h3>
+                            </div>
+                       )
+                    })}
+                    {/* {this.state.listOfProjects && this.state.listOfProjects.map(project => {
                         return (
                             // usamos el '_id' de cada project como 'key'
                             <div key={project._id}>
                                 <Link to={`/projects/${project._id}`}>
-                                    <h3>{project.title}</h3>
+                                    
                                     </Link>
-                                    {/*  agregamos una visualización de las tareas que existen a través de un mapeo de las tasks de cada project, y lo retornamos dentro de un <ul> (no olvidar la 'key')   */}
+                                    agregamos una visualización de las tareas que existen a través de un mapeo de las tasks de cada project, y lo retornamos dentro de un <ul> (no olvidar la 'key')  
                                     <ul>
-                                        {project.tasks.map((task, index) => {
-                                            return <li key={index}>{task.title}</li>
-                                        })}
+                                        
                                     </ul>
                                     <p style={{maxWidth: '400px'}} >{project.description} </p>
                             </div>
-                        )})
-                    }
+                        )}) 
+                    } */}
                 </div>
-                <div>
-                    <AddProject getData={() => this.getAllProjects()} /> {/* <== !!! */}
-                </div>
+                {/* <div>
+                    <AddProject getData={() => this.getAllProjects()} /> 
+                </div> */}
             </div>
         );
     }
